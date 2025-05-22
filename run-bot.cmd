@@ -6,6 +6,6 @@ REM Activate the virtual environment if applicable
 REM call venv\Scripts\activate
 
 REM Run the bot
-python -m bot.main
+python -m main
 
 pause
