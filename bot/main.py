@@ -11,6 +11,10 @@ load_dotenv()
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 
+if not TOKEN:
+    print("❌ DISCORD_TOKEN không tồn tại trong biến môi trường!")
+    exit(1)
+
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.default())
 
 @bot.event
@@ -38,6 +42,10 @@ if __name__ == "__main__":
     Thread(target=run_web).start()
 
     for cog in cogs:
-        bot.load_extension(cog)
+        try:
+            bot.load_extension(cog)
+            print(f"✅ Đã load cog: {cog}")
+        except Exception as e:
+            print(f"❌ Lỗi khi load cog {cog}: {e}")
 
     bot.run(TOKEN)
