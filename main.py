@@ -120,4 +120,21 @@ async def on_member_update(before: discord.Member, after: discord.Member):
                     f"Chào mừng {after.mention}! Vui lòng đọc hướng dẫn tại đây: {KHONG_RO_GUIDE_LINK}"
                 )
 
-bot.run(TOKEN)
+if __name__ == "__main__":
+    import threading
+    from flask import Flask
+
+    app = Flask(__name__)
+
+    @app.route("/")
+    def home():
+        return "OK"
+
+    def run_flask():
+        app.run(host="0.0.0.0", port=8080)
+
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.daemon = True
+    flask_thread.start()
+
+    bot.run(TOKEN)
