@@ -1,0 +1,1 @@
+# This file initializes the cogs package, allowing for modular command handling and event management.
