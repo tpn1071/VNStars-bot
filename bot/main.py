@@ -16,17 +16,11 @@ bot = commands.Bot(command_prefix="!", intents=discord.Intents.default())
 @bot.event
 async def on_ready():
     print(f"✅ Bot đã đăng nhập với tên {bot.user}")
-    try:
-        synced = await bot.tree.sync()
-        print(f"Đã sync {len(synced)} slash commands.")
-    except Exception as e:
-        print(f"Lỗi khi sync slash commands: {e}")
 
 # Load cogs
 cogs = [
     "cogs.role_clone",
-    "cogs.auto_tag",
-    "cogs.help_suggest"  # Thêm dòng này
+    "cogs.auto_tag"
 ]
 
 def run_web():
