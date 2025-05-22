@@ -16,7 +16,9 @@ async def on_ready():
 # Load cogs
 cogs = [
     "cogs.role_clone",
-    "cogs.auto_tag"
+    "cogs.auto_tag",
+    "cogs.vns",
+    "cogs.help_suggest",
 ]
 
 if __name__ == "__main__":
