@@ -26,8 +26,7 @@ async def on_ready():
 cogs = [
     "cogs.role_clone",
     "cogs.auto_tag",
-    "cogs.help_suggest",
-    "cogs.vns"  # Thêm dòng này
+    "cogs.help_suggest"  # Thêm dòng này
 ]
 
 def run_web():
