@@ -77,8 +77,18 @@ class RoleSelect(discord.ui.Select):
         if role:
             await interaction.response.send_modal(RoleNameModal(role))
 
+# Danh sách các channel ID được phép dùng lệnh
+ALLOWED_CHANNEL_IDS = [1375155332082307252, 1374667820746412054]  # Thay bằng ID kênh bạn muốn
+# 1 - test, 2 - bot-commands
+
+def is_in_allowed_channel():
+    async def predicate(ctx):
+        return ctx.channel.id in ALLOWED_CHANNEL_IDS
+    return commands.check(predicate)
+
 @bot.command()
-@commands.has_permissions(manage_roles=True)
+@is_in_allowed_channel()
+# @commands.has_permissions(manage_roles=True)
 async def clonerolegui(ctx):
     roles = [
         r for r in ctx.guild.roles
