@@ -2,22 +2,34 @@ import discord
 from discord.ext import commands
 import os
 from dotenv import load_dotenv
+from flask import Flask
+from threading import Thread
 
-# Load biến môi trường trong file .env
+# ===== TẠO WEB SERVER GIỮ BOT SỐNG =====
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "✅ Bot is running!"
+
+def run_web():
+    app.run(host='0.0.0.0', port=8080)
+
+def keep_alive():
+    t = Thread(target=run_web)
+    t.start()
+
+# ===== TẢI BIẾN MÔI TRƯỜNG =====
 load_dotenv()
-
-# ===== THÔNG TIN CẤU HÌNH =====
 TOKEN = os.getenv("DISCORD_TOKEN")  # Lấy token từ biến môi trường
 
-# ID các role
-ROLE_UNKNOWN_ID = 1373737799093715014  # Role "Member" → unknown
-ROLE_KHONG_RO_ID = 1373741381369069568  # Role "Hội Viên" → không rõ
+# ===== CẤU HÌNH ROLE & KÊNH =====
+ROLE_UNKNOWN_ID = 1373737799093715014
+ROLE_KHONG_RO_ID = 1373741381369069568
 
-# Kênh gửi thông báo
-CHANNEL_PENDING_ID = 1373712993761886400  # ID của kênh gửi thông báo
-CHANNEL_CHO_DUYET_ID = 1373593067667329034  # ID của kênh gửi thông báo
+CHANNEL_PENDING_ID = 1373712993761886400
+CHANNEL_CHO_DUYET_ID = 1373593067667329034
 
-# Link hướng dẫn
 UNKNOWN_GUIDE_LINK = "https://discord.com/channels/1373260056530911296/1373712993761886400/1373779221666594876"
 KHONG_RO_GUIDE_LINK = "https://discord.com/channels/1373260056530911296/1373593067667329034/1373778884008611919"
 
@@ -90,7 +102,7 @@ async def clonerolegui(ctx):
 
     await ctx.send("🧩 Chọn role để clone:", view=RoleDropdown(roles))
 
-# ===== AUTO TAG KHI ĐƯỢC GÁN ROLE =====
+# ===== TỰ ĐỘNG GỬI THÔNG BÁO KHI GÁN ROLE =====
 @bot.event
 async def on_member_update(before: discord.Member, after: discord.Member):
     added_roles = [role for role in after.roles if role not in before.roles]
@@ -102,7 +114,6 @@ async def on_member_update(before: discord.Member, after: discord.Member):
                 await channel1.send(
                     f"Welcome {after.mention}! Please read the instructions here: {UNKNOWN_GUIDE_LINK}"
                 )
-
         elif role.id == ROLE_KHONG_RO_ID:
             channel2 = after.guild.get_channel(CHANNEL_CHO_DUYET_ID)
             if channel2:
@@ -110,4 +121,6 @@ async def on_member_update(before: discord.Member, after: discord.Member):
                     f"Chào mừng {after.mention}! Vui lòng đọc hướng dẫn tại đây: {KHONG_RO_GUIDE_LINK}"
                 )
 
+# ===== CHẠY WEB SERVER VÀ BOT =====
+keep_alive()
 bot.run(TOKEN)
