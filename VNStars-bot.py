@@ -2,36 +2,22 @@ import discord
 from discord.ext import commands
 import os
 from dotenv import load_dotenv
-from flask import Flask
-from threading import Thread
-import time
 
-# ===== TẠO WEB SERVER GIỮ BOT SỐNG =====
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "✅ Bot is running!"
-
-def run_web():
-    port = int(os.environ.get("PORT", 8080))  # Đảm bảo Render dùng đúng port
-    app.run(host='0.0.0.0', port=port)
-
-def keep_alive():
-    t = Thread(target=run_web)
-    t.start()
-
-# ===== TẢI BIẾN MÔI TRƯỜNG =====
+# Load biến môi trường trong file .env
 load_dotenv()
-TOKEN = os.getenv("DISCORD_TOKEN")
 
-# ===== CẤU HÌNH ROLE & KÊNH =====
-ROLE_UNKNOWN_ID = 1373737799093715014
-ROLE_KHONG_RO_ID = 1373741381369069568
+# ===== THÔNG TIN CẤU HÌNH =====
+TOKEN = os.getenv("DISCORD_TOKEN")  # Lấy token từ biến môi trường
 
-CHANNEL_PENDING_ID = 1373712993761886400
-CHANNEL_CHO_DUYET_ID = 1373593067667329034
+# ID các role
+ROLE_UNKNOWN_ID = 1373737799093715014  # Role "Member" → unknown
+ROLE_KHONG_RO_ID = 1373741381369069568  # Role "Hội Viên" → không rõ
 
+# Kênh gửi thông báo
+CHANNEL_PENDING_ID = 1373712993761886400  # ID của kênh gửi thông báo
+CHANNEL_CHO_DUYET_ID = 1373593067667329034  # ID của kênh gửi thông báo
+
+# Link hướng dẫn
 UNKNOWN_GUIDE_LINK = "https://discord.com/channels/1373260056530911296/1373712993761886400/1373779221666594876"
 KHONG_RO_GUIDE_LINK = "https://discord.com/channels/1373260056530911296/1373593067667329034/1373778884008611919"
 
@@ -46,14 +32,6 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 @bot.event
 async def on_ready():
     print(f"✅ Bot đã đăng nhập với tên {bot.user}")
-
-@bot.event
-async def on_disconnect():
-    print("⚠️ Bot bị mất kết nối khỏi Discord.")
-
-@bot.event
-async def on_resumed():
-    print("🔁 Bot đã reconnect thành công.")
 
 # ===== CLONE ROLE GUI =====
 class RoleNameModal(discord.ui.Modal, title="Nhập tên role mới"):
@@ -112,7 +90,7 @@ async def clonerolegui(ctx):
 
     await ctx.send("🧩 Chọn role để clone:", view=RoleDropdown(roles))
 
-# ===== TỰ ĐỘNG GỬI THÔNG BÁO KHI GÁN ROLE =====
+# ===== AUTO TAG KHI ĐƯỢC GÁN ROLE =====
 @bot.event
 async def on_member_update(before: discord.Member, after: discord.Member):
     added_roles = [role for role in after.roles if role not in before.roles]
@@ -124,6 +102,7 @@ async def on_member_update(before: discord.Member, after: discord.Member):
                 await channel1.send(
                     f"Welcome {after.mention}! Please read the instructions here: {UNKNOWN_GUIDE_LINK}"
                 )
+
         elif role.id == ROLE_KHONG_RO_ID:
             channel2 = after.guild.get_channel(CHANNEL_CHO_DUYET_ID)
             if channel2:
@@ -131,14 +110,4 @@ async def on_member_update(before: discord.Member, after: discord.Member):
                     f"Chào mừng {after.mention}! Vui lòng đọc hướng dẫn tại đây: {KHONG_RO_GUIDE_LINK}"
                 )
 
-# ===== CHẠY WEB SERVER VÀ BOT VỚI VÒNG LẶP TỰ RESTART =====
-keep_alive()
-
-while True:
-    try:
-        print("🚀 Khởi động bot...")
-        bot.run(TOKEN)
-    except Exception as e:
-        print(f"❌ Bot bị lỗi: {e}")
-        print("🔁 Restart bot sau 5 giây...")
-        time.sleep(5)
+bot.run(TOKEN)
