@@ -16,4 +16,5 @@ class CustomBot(commands.Bot):
             intents.message_content = True
             intents.members = True
             intents.presences = True
+            intents.reactions = True
         super().__init__(command_prefix=command_prefix, intents=intents, **kwargs)
