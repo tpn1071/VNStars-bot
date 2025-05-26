@@ -12,11 +12,11 @@ def setup_on_ready(bot: commands.Bot):
             status=discord.Status.online,
         )
 
-        # Gửi thông báo đã sẵn sàng
-        await send_message_ready_on_channel(bot)
+        await send_message_to_test_channel(bot)
 
 
-async def send_message_ready_on_channel(bot: commands.Bot):
+# Hàm này sẽ gửi thông báo vào kênh khi bot đã sẵn sàng
+async def send_message_to_test_channel(bot: commands.Bot):
     message = (
         f"Name: **{bot.user.name}**\n"  # type:ignore
         f"ID: `{bot.user.id}`\n"  # type:ignore
@@ -24,11 +24,14 @@ async def send_message_ready_on_channel(bot: commands.Bot):
     embed = discord.Embed(
         title="Yo mọi người!🚀 Mình vừa khởi động xong rồi đây 😎",
         description=message,
-        color=discord.Color.from_str("#5865f2"),
+        color=discord.Color.from_str(settings.GREEN_PRIMARY_COLOR),
+        timestamp=discord.utils.utcnow(),
     )
 
     channel_id = settings.TEST_CHANNEL_ID
     channel = bot.get_channel(channel_id)
     if channel and isinstance(channel, discord.TextChannel):
-        print(embed.to_dict())
         await channel.send(embed=embed)
+
+        # log check run
+        print(f"send_message: {channel.name} ({channel.id})")
