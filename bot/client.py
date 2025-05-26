@@ -1,15 +1,13 @@
 import discord
 from discord.ext import commands
 from typing import Any
+from bot.config import settings
+
 
 class CustomBot(commands.Bot):
-    """
-    Custom Discord Bot with default intents and command prefix.
-    """
-
     def __init__(
         self,
-        command_prefix: str = "!",
+        command_prefix: str = settings.BOT_PREFIX,
         intents: discord.Intents | None = None,
         **kwargs: Any
     ):

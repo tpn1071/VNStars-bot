@@ -2,18 +2,33 @@ import discord
 from discord.ext import commands
 from bot.config import settings
 
+
 def setup_on_ready(bot: commands.Bot):
     @bot.event
-    async def on_ready():   #type:ignore
-        print(f"✅ Bot đã online: {bot.user}")
+    async def on_ready():  # type:ignore
         # Đổi presence/status
-        await bot.change_presence(activity=discord.Game(name="gái"))
-        # Gửi log lên channel nếu có cấu hình
-        channel_id = getattr(settings, "LOG_CHANNEL_ID", None)
-        if channel_id:
-            channel = bot.get_channel(channel_id)
-            if channel and isinstance(channel, discord.TextChannel):
-                await channel.send(f"🤖 Bot đã online: {bot.user}")
-        # In thêm thông tin server
-        for guild in bot.guilds:
-            print(f"Đã kết nối tới server: {guild.name} (ID: {guild.id})")
+        await bot.change_presence(
+            activity=discord.Game(name="cave"),
+            status=discord.Status.online,
+        )
+
+        # Gửi thông báo đã sẵn sàng
+        await send_message_ready_on_channel(bot)
+
+
+async def send_message_ready_on_channel(bot: commands.Bot):
+    message = (
+        f"Name: **{bot.user.name}**\n"  # type:ignore
+        f"ID: `{bot.user.id}`\n"  # type:ignore
+    )
+    embed = discord.Embed(
+        title="Yo mọi người!🚀 Mình vừa khởi động xong rồi đây 😎",
+        description=message,
+        color=discord.Color.from_str("#5865f2"),
+    )
+
+    channel_id = settings.TEST_CHANNEL_ID
+    channel = bot.get_channel(channel_id)
+    if channel and isinstance(channel, discord.TextChannel):
+        print(embed.to_dict())
+        await channel.send(embed=embed)
