@@ -17,7 +17,7 @@ def start_background_tasks(bot: commands.Bot):
             datetime.time(hour=18, minute=0),
         ]
     )
-    async def send_loop_message():
+    async def send_loop_message():  # type:ignore
         now = datetime.datetime.now().hour
         greeting = ""
 

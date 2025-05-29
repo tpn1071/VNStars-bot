@@ -7,7 +7,7 @@ from bot.events.on_message import setup_on_message
 from bot.events.on_presence_update import setup_on_presence_update
 from bot.events.on_reaction_add import setup_on_reaction_add
 from bot.events.on_ready import setup_on_ready
-from bot.events.on_member_update import setup_on_member_update
+from bot.events.on_member_update.setup_on_member_update import setup_on_member_update
 from bot.tasks.loop_task import start_background_tasks
 
 bot = CustomBot()
