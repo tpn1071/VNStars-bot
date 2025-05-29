@@ -2,10 +2,7 @@ import discord
 from bot.config import settings
 from typing import Dict, Any
 
-from bot.utils.decorators import try_catch_async
 
-
-@try_catch_async
 async def on_member_added_unknown_role(before: discord.Member, after: discord.Member):
     general_channel_id = settings.GENERAL_TEXT_CHANNEL_ID
     choose_language_channel_id = settings.CHOOSE_LANGUAGE_TEXT_CHANNEL_ID
@@ -65,7 +62,6 @@ async def on_member_added_unknown_role(before: discord.Member, after: discord.Me
     # await choose_language(after, configs["choose_language"])
 
 
-@try_catch_async
 async def welcome(member: discord.Member, configs: Dict[str, Any]):
     general_channel = member.guild.get_channel(configs["channel_id"])
     if general_channel and isinstance(general_channel, discord.TextChannel):
@@ -75,7 +71,6 @@ async def welcome(member: discord.Member, configs: Dict[str, Any]):
         await general_channel.send(f"#{settings.CHOOSE_LANGUAGE_CHANNEL_MESSAGE_PATH}")
 
 
-@try_catch_async
 async def choose_language(member: discord.Member, configs: Dict[str, Any]):
     choose_language_channel = member.guild.get_channel(configs["channel_id"])
     if choose_language_channel and isinstance(
@@ -95,7 +90,6 @@ async def choose_language(member: discord.Member, configs: Dict[str, Any]):
         await choose_language_channel.send(embed=embed)
 
 
-@try_catch_async
 async def send_message(channel: discord.TextChannel, configs: Dict[str, Any]):
     embed = discord.Embed()
     embed.title = configs["embed"]["title"]
