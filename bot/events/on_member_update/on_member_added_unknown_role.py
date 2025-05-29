@@ -9,6 +9,7 @@ from bot.utils.decorators import try_catch_async
 async def on_member_added_unknown_role(before: discord.Member, after: discord.Member):
     general_channel_id = settings.GENERAL_TEXT_CHANNEL_ID
     choose_language_channel_id = settings.CHOOSE_LANGUAGE_TEXT_CHANNEL_ID
+
     configs: Dict[str, Any] = {
         "welcome": {
             "channel_id": general_channel_id,
