@@ -1,63 +1,66 @@
 import discord
 from bot.config import settings
 from typing import Dict, Any
+from discord.ext import commands
+from bot.helpers.send_message import send_message
 
-
-async def on_member_added_unknown_role(before: discord.Member, after: discord.Member):
-    general_channel_id = settings.GENERAL_TEXT_CHANNEL_ID
-    choose_language_channel_id = settings.CHOOSE_LANGUAGE_TEXT_CHANNEL_ID
-
-    configs: Dict[str, Any] = {
-        "welcome": {
+general_channel_id = settings.GENERAL_TEXT_CHANNEL_ID
+choose_language_channel_id = settings.CHOOSE_LANGUAGE_TEXT_CHANNEL_ID
+configs: Dict[str, Any] = {
+    "welcome": {
+        "channel_id": general_channel_id,
+        "vietnamese": {
             "channel_id": general_channel_id,
-            "vietnamese": {
-                "channel_id": general_channel_id,
-                "embed": {
-                    "title": "",
-                    "description": (
-                        f"Chào mừng bạn đến với Cổng vào của Hội VNStars!\n"
-                        f"Hãy chọn ngôn ngữ của bạn để tiếp tục\n"
-                    ),
-                },
-            },
-            "english": {
-                "channel_id": general_channel_id,
-                "embed": {
-                    "title": "",
-                    "description": (
-                        f"Welcome to the VNStars Guild Entrance!\n"
-                        f"Please choose your language to proceed\n"
-                    ),
-                },
+            "embed": {
+                "title": "",
+                "description": (
+                    f"Chào mừng bạn đến với Cổng vào của Hội VNStars!\n"
+                    f"Hãy chọn ngôn ngữ của bạn để tiếp tục\n"
+                ),
             },
         },
-        "choose_language": {
+        "english": {
+            "channel_id": general_channel_id,
+            "embed": {
+                "title": "",
+                "description": (
+                    f"Welcome to the VNStars Guild Entrance!\n"
+                    f"Please choose your language to proceed\n"
+                ),
+            },
+        },
+    },
+    "choose_language": {
+        "channel_id": choose_language_channel_id,
+        "vietnamese": {
             "channel_id": choose_language_channel_id,
-            "vietnamese": {
-                "channel_id": choose_language_channel_id,
-                "embed": {
-                    "title": "",
-                    "description": (
-                        f"⭐ Bạn dùng ngôn ngữ nào, Tiếng Việt hay Tiếng Anh?\n"
-                        f"⭐ Tiếng Việt — Thả emoji ⭐ để nhận role Tiếng Việt\n"
-                        f"⭐ Ngại gì không thả! Cứ thả cả hai nếu thích 😄!\n"
-                    ),
-                },
-            },
-            "english": {
-                "channel_id": choose_language_channel_id,
-                "embed": {
-                    "title": "",
-                    "description": (
-                        f"🌐 What language do you use, English or Vietnamese?\n"
-                        f"🌐 English — React 🌐 to get English role\n"
-                        f"🌐 Don't be shy, drop that emoji! Why not both? React with both if you like 😄!\n"
-                    ),
-                },
+            "embed": {
+                "title": "",
+                "description": (
+                    f"⭐ Bạn dùng ngôn ngữ nào, Tiếng Việt hay Tiếng Anh?\n"
+                    f"⭐ Tiếng Việt — Thả emoji ⭐ để nhận role Tiếng Việt\n"
+                    f"⭐ Ngại gì không thả! Cứ thả cả hai nếu thích 😄!\n"
+                ),
             },
         },
-    }
+        "english": {
+            "channel_id": choose_language_channel_id,
+            "embed": {
+                "title": "",
+                "description": (
+                    f"🌐 What language do you use, English or Vietnamese?\n"
+                    f"🌐 English — React 🌐 to get English role\n"
+                    f"🌐 Don't be shy, drop that emoji! Why not both? React with both if you like 😄!\n"
+                ),
+            },
+        },
+    },
+}
 
+
+async def on_member_added_unknown_role(
+    bot: commands.Bot, before: discord.Member, after: discord.Member
+):
     await welcome(after, configs["welcome"])
     # await choose_language(after, configs["choose_language"])
 
@@ -88,11 +91,3 @@ async def choose_language(member: discord.Member, configs: Dict[str, Any]):
         embed.set_author(name=str(member), icon_url=avatar_url)
 
         await choose_language_channel.send(embed=embed)
-
-
-async def send_message(channel: discord.TextChannel, configs: Dict[str, Any]):
-    embed = discord.Embed()
-    embed.title = configs["embed"]["title"]
-    embed.description = configs["embed"]["description"]
-    embed.color = discord.Color.from_str(settings.GREEN_PRIMARY_COLOR)
-    await channel.send(embed=embed)

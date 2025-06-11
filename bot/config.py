@@ -42,9 +42,9 @@ class Settings(BaseSettings):
     # [🌐💬-chat]
     EN_CHAT_TEXT_CHANNEL_ID: int = Field(..., alias="EN_CHAT_TEXT_CHANNEL_ID")
     # [⭐📜-sảnh]
-    VI_HALL_TEXT_CHANNEL_ID: int = Field(..., alias="VI_HALL_TEXT_CHANNEL_ID")
+    VI_HALL_FORUM_CHANNEL_ID: int = Field(..., alias="VI_HALL_FORUM_CHANNEL_ID")
     # [🌐📜-hall]
-    EN_HALL_TEXT_CHANNEL_ID: int = Field(..., alias="EN_HALL_TEXT_CHANNEL_ID")
+    EN_HALL_FORUM_CHANNEL_ID: int = Field(..., alias="EN_HALL_FORUM_CHANNEL_ID")
     # [🤖💻-bot-commands]
     BOT_COMMANDS_TEXT_CHANNEL_ID: int = Field(..., alias="BOT_COMMANDS_TEXT_CHANNEL_ID")
     # [🤖📝-bot-logs]
@@ -90,9 +90,6 @@ class Settings(BaseSettings):
 
     # Màu
     GREEN_PRIMARY_COLOR: str = Field(..., alias="GREEN_PRIMARY_COLOR")
-
-    # TEST
-    TEST_CHANNEL_ID: int = Field(..., alias="TEST_CHANNEL_ID")
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 

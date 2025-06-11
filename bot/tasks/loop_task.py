@@ -35,4 +35,4 @@ def start_background_tasks(bot: commands.Bot):
             await channel.send(f"@everyone\n")
             await channel.send(greeting)
 
-    send_loop_message.start()
+    # send_loop_message.start()
